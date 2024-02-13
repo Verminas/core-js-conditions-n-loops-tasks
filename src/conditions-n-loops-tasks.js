@@ -448,6 +448,7 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
+
 function sortByAsc(arr) {
   const array = arr;
   for (let i = 0; i < arr.length - 1; i += 1) {
@@ -513,8 +514,62 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getDigits(number) {
+  let numberCopy = number;
+  const digits = [];
+  if (numberCopy === 0) {
+    digits.push(0);
+  } else {
+    while (numberCopy > 0) {
+      const digit = numberCopy % 10;
+      digits.unshift(digit);
+      numberCopy = Math.floor(numberCopy / 10);
+    }
+  }
+  return digits;
+}
+
+function swap(arr, i, j) {
+  const temp = arr[i];
+  const array = arr;
+  array[i] = array[j];
+  array[j] = temp;
+}
+
+function reverse(arr, start) {
+  let i = start;
+  let j = arr.length - 1;
+  while (i < j) {
+    swap(arr, i, j);
+    i += 1;
+    j -= 1;
+  }
+}
+
+function getNearestBigger(number) {
+  const digits = getDigits(number);
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) {
+    return number;
+  }
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+  swap(digits, i, j);
+  reverse(digits, i + 1);
+
+  let result = 0;
+  for (let k = 0; k < digits.length; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
